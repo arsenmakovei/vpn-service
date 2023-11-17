@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          <h2>Site List</h2>
+          <a href="{% url 'vpn:site-create' %}" class="btn btn-dark">Create Site</a>
+        </div>
+        {% if site_list %}
+          <table class="table table-hover table-bordered mt-2">
+            <thead class="thead-dark">
+            <tr>
+              <th>Site Name</th>
+              <th>Url</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for site in site_list %}
+              <tr>
+                <td>{{ site.name }}</td>
+                <td>
+                  <a href="{% url 'vpn:proxy-site' user_site_name=site.user_site_name site_id=site.id routes_on_original_site=site.routes_on_original_site %}">
+                    {{ site.url }}
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p>No sites created yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
