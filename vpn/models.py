@@ -6,6 +6,10 @@ from django.utils.text import slugify
 
 
 class Site(models.Model):
+    """
+    Model representing a site associated with a user.
+    """
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     url = models.URLField()
@@ -18,9 +22,15 @@ class Site(models.Model):
 
     @property
     def user_site_name(self) -> str:
+        """
+        Returns a slugified version of the site name.
+        """
         return slugify(self.name)
 
     @property
     def routes_on_original_site(self) -> str:
+        """
+        Returns the route on the original site URL.
+        """
         site_url = urlparse(self.url)
         return f"{site_url.path}{site_url.query}" if site_url.query else site_url.path

@@ -14,20 +14,34 @@ from vpn.models import Site
 
 
 class SiteListView(LoginRequiredMixin, ListView):
+    """
+    View for displaying a list of sites owned by the logged-in user.
+    """
+
     model = Site
 
     def get_queryset(self):
+        """
+        Retrieves the queryset of sites owned by the logged-in user.
+        """
         user = self.request.user
         queryset = Site.objects.filter(user=user)
         return queryset
 
 
 class SiteCreateView(LoginRequiredMixin, CreateView):
+    """
+    View for creating a new site.
+    """
+
     model = Site
     form_class = SiteForm
     success_url = reverse_lazy("vpn:site-list")
 
     def form_valid(self, form: SiteForm):
+        """
+        Overrides the form_valid method to set the user before saving the form.
+        """
         form.instance.user = self.request.user
         return super().form_valid(form)
 
@@ -36,6 +50,9 @@ class SiteCreateView(LoginRequiredMixin, CreateView):
 def proxy_site(
     request, user_site_name: str, site_id: int, routes_on_original_site: str
 ):
+    """
+    Proxy view for fetching and rendering content from an external site.
+    """
     site = get_object_or_404(Site, id=site_id)
     parsed_site_url = urlparse(site.url)
     site_url = (
@@ -58,6 +75,9 @@ def proxy_site(
 def update_links(
     soup: BeautifulSoup, user_site_name: str, site_id: int, parsed_site_url
 ):
+    """
+    Update links in the BeautifulSoup object to point to the proxy view.
+    """
     for link in soup.find_all("a", href=True):
         href = urlparse(link["href"])
 
@@ -80,6 +100,9 @@ def update_links(
 
 
 def update_site_statistics(site: Site, request_size: int, response_size: int):
+    """
+    Update site statistics such as page views, data sent, and data received.
+    """
     site.page_views += 1
     site.data_sent_size += request_size
     site.data_received_size += response_size
