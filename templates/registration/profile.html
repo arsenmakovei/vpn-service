@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <h2 class="mt-4">User Profile</h2>
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title">{{ user.username }}</h5>
+            <p class="card-text">First name: {{ user.first_name }}</p>
+            <p class="card-text">Last name: {{ user.last_name }}</p>
+            <p class="card-text">Email: {{ user.email }}</p>
+            <p class="card-text">Date joined: {{ user.date_joined }}</p>
+            <a href="{% url 'user:profile-update' %}" class="btn btn-dark">Update User Information</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
